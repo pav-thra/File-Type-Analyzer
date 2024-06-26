@@ -12,10 +12,15 @@ public class FileTypeDetector {
         // Remove any surrounding quotes from the input
         filepath = filepath.replace("\"", "");
 
-        //Use a try catch block
-        try {
+        try
+        {
+            long startTime = System.nanoTime();
             boolean isPDF = findIfPdf(filepath);
+            long endTime = System.nanoTime();
+            long timeTaken = endTime - startTime;
+
             System.out.println(filepath + " is a PDF? : " + isPDF);
+            System.out.println("Time taken is "+ timeTaken + " nanoseconds");
         }
         catch (IOException e)
         {
@@ -29,14 +34,14 @@ public class FileTypeDetector {
         try(FileInputStream fileInputStream = new FileInputStream(filepath))
         //File Input Stream is used to open the file
         {
-            byte[] header = new byte[5]; //to store the first 5 bytes of the array
-            //First 5 coz file has a signature that tells us what kind of file it is
+            byte[] header = new byte[1024]; //to store the first 1024 bytes of the array
+            //IN stage 1:First 5 coz file has a signature that tells us what kind of file it is
 
             if(fileInputStream.read(header) != -1)
             {
                 //convert the byte array to String
                 String headerString = new String(header);
-                boolean result = headerString.startsWith("%PDF");
+                boolean result = KMPAlgorithm.KMPSearch("%PDF" , headerString);
                 return result;
             }
         }
