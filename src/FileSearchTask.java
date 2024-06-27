@@ -14,7 +14,7 @@ public class FileSearchTask implements Callable<List<String>> {
     }
 
     @Override
-    public List<String> call() throws Exception {
+    public List<String> call() {
         // create empty list of type sting to pu result in
         List<String> res = new ArrayList<>();
         searchDirectory(directory, extensions, res);
