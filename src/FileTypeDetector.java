@@ -1,50 +1,73 @@
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Scanner;
+import java.io.File;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class FileTypeDetector {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Enter the path to your pdf file");
-        String filepath = sc.nextLine();
+        System.out.println("Enter the path to your directory");
+        String dirString = sc.nextLine().replace("\"", "");
+        File dirPath = new File(dirString);
+        String[] extensions = {".pdf", ".txt", ".jpg", ".jpeg"};
 
-        // Remove any surrounding quotes from the input
-        filepath = filepath.replace("\"", "");
+        //Creating a manager to handle 4 tasks at the same time
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
 
         try
         {
-            long startTime = System.nanoTime();
-            boolean isPDF = findIfPdf(filepath);
-            long endTime = System.nanoTime();
-            long timeTaken = endTime - startTime;
-
-            System.out.println(filepath + " is a PDF? : " + isPDF);
-            System.out.println("Time taken is "+ timeTaken + " nanoseconds");
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            //this is used to see how the code was before the error occurred
-        }
-    }
-
-    public static boolean findIfPdf(String filepath) throws IOException
-    {
-        try(FileInputStream fileInputStream = new FileInputStream(filepath))
-        //File Input Stream is used to open the file
-        {
-            byte[] header = new byte[1024]; //to store the first 1024 bytes of the array
-            //IN stage 1:First 5 coz file has a signature that tells us what kind of file it is
-
-            if(fileInputStream.read(header) != -1)
+            List<Future<List<String>>> future = new ArrayList<>();  //creates empty list to store futures
+            for(String extension : extensions)
             {
-                //convert the byte array to String
-                String headerString = new String(header);
-                boolean result = KMPAlgorithm.KMPSearch("%PDF" , headerString);
-                return result;
+                FileSearchTask fsTask = new FileSearchTask(dirPath, extension); //creates a new task to look for files of specific type in the folder
+                Future<List<String>> f = executorService.submit(fsTask);    //gives task to executorService (manager) to start working and gives ypu the future
+                future.add(f); //puts the future in the list of futures
+            }
+
+            Map<String, List<String>> filesByExtension = new HashMap<>();
+            for (String extension : extensions)
+            {
+                filesByExtension.put(extension, new ArrayList<>());
+            }
+
+            for (Future<List<String>> f : future)
+            {
+                List <String> files =f.get();   //gets the list of found files
+                for (String file : files)
+                {
+                    for (String extension : extensions)
+                    {
+                        if(file.endsWith(extension))
+                        {
+                            filesByExtension.get(extension).add(file);
+                        }
+                    }
+                }
+            }
+
+            for (Map.Entry<String, List<String>> entry :filesByExtension.entrySet())
+            {
+                String extension = entry.getKey();
+                List<String> files = entry.getValue();
+                System.out.print(extension.substring(1) + " : ");
+                for (String file : files)
+                {
+                    System.out.println(file);
+                }
+                System.out.println();
             }
         }
-        return false;
+        catch (Exception e)
+        {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();    //prints out the error
+            //this is used to see how the code was before the error occurred
+        }
+        finally
+        {
+            executorService.shutdown();
+        }
     }
 }
