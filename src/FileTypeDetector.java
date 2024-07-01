@@ -47,16 +47,19 @@ public class FileTypeDetector {
                 }
             }
 
+            List<String> allFiles = new ArrayList<>(); //stores names of all files
             for (Map.Entry<String, List<String>> entry :filesByExtension.entrySet())
             {
-                String extension = entry.getKey();
-                List<String> files = entry.getValue();
-                System.out.print(extension.substring(1) + " : ");
-                for (String file : files)
-                {
-                    System.out.println(file);
-                }
-                System.out.println();
+                allFiles.addAll(entry.getValue());
+            }
+
+            allFiles.sort(new FileExtensionComparator());
+            List<String> orderedExtensions = Arrays.asList("pdf", "txt", "jpg", "jpeg");
+            allFiles.sort(new PriorityFileExtensionComparator(orderedExtensions));
+
+            for(String file: allFiles)
+            {
+                System.out.println(file);
             }
         }
         catch (Exception e)
