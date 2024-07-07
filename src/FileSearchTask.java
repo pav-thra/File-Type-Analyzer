@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 public class FileSearchTask implements Callable<PatternMatchResult> {
+    private static final int HEADER_SIZE = 1024; // Read only the first 1024 bytes for pattern matching
+
     private final File file;
     private final List<Pattern> patterns;
 
@@ -17,7 +19,7 @@ public class FileSearchTask implements Callable<PatternMatchResult> {
     @Override
     public PatternMatchResult call() {
         try {
-            byte[] data = readFileToByteArray(file);
+            byte[] data = readHeader(file);
             String fileContent = new String(data, StandardCharsets.UTF_8);
             Pattern bestMatch = null;
 
@@ -36,9 +38,9 @@ public class FileSearchTask implements Callable<PatternMatchResult> {
         }
     }
 
-    private byte[] readFileToByteArray(File file) throws IOException {
+    private byte[] readHeader(File file) throws IOException {
         try (FileInputStream fis = new FileInputStream(file)) {
-            byte[] data = new byte[(int) file.length()];
+            byte[] data = new byte[Math.min(HEADER_SIZE, (int) file.length())];
             fis.read(data);
             return data;
         }
