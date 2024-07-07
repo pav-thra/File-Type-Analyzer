@@ -1,40 +1,46 @@
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-//This returns a list of strings
-public class FileSearchTask implements Callable<List<String>> {
-    private final File directory; //which folder to search in
-    private final String extensions; //what kind of files to look for like pdf, txt, etc
+public class FileSearchTask implements Callable<PatternMatchResult> {
+    private final File file;
+    private final List<Pattern> patterns;
 
-    public FileSearchTask(File directory, String extensions) {
-        this.directory = directory;
-        this.extensions = extensions;
+    public FileSearchTask(File file, List<Pattern> patterns) {
+        this.file = file;
+        this.patterns = patterns;
     }
 
     @Override
-    public List<String> call() {
-        // create empty list of type sting to pu result in
-        List<String> res = new ArrayList<>();
-        searchDirectory(directory, extensions, res);
-        return res;
+    public PatternMatchResult call() {
+        try {
+            byte[] data = readFileToByteArray(file);
+            String fileContent = new String(data, StandardCharsets.UTF_8);
+            Pattern bestMatch = null;
+
+            for (Pattern pattern : patterns) {
+                if (fileContent.contains(pattern.getSignature())) {
+                    if (bestMatch == null || pattern.getId() > bestMatch.getId()) {
+                        bestMatch = pattern;
+                    }
+                }
+            }
+
+            return new PatternMatchResult(file.getName(), bestMatch);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    private void searchDirectory(File directory, String extensions, List<String> res)
-    {
-        //Opens the folder and gives all things inside the folder
-        File[] fileArr = directory.listFiles();
-
-        if (fileArr != null)
-        {
-            for(File eachFile : fileArr)
-            {
-                if(eachFile.isDirectory())
-                    searchDirectory(eachFile, extensions, res); //goes inside that folder and searches it too
-                else if (eachFile.getName().endsWith(extensions)) //checks if that file ends with the correct type
-                    res.add(eachFile.getAbsolutePath()); //found the file and puts in the result
-            }
+    private byte[] readFileToByteArray(File file) throws IOException {
+        try (FileInputStream fis = new FileInputStream(file)) {
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            return data;
         }
     }
 }
