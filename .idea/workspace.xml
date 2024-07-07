@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd467efe-b014-4e72-a681-8376179caec5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+    <list default="true" id="fd467efe-b014-4e72-a681-8376179caec5" name="Changes" comment="Issue resolved">
+      <change afterPath="$PROJECT_DIR$/File Type Detector1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/File Type Analyzer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/File Type Detector1.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FileSearchTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FileSearchTask.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FileTypeDetector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FileTypeDetector.java" afterDir="false" />
     </list>
@@ -59,6 +58,23 @@
       <option name="presentableId" value="Default" />
       <updated>1720086661512</updated>
     </task>
+    <task id="LOCAL-00001" summary="File Search Task (issue : not recognizing PDF)">
+      <option name="closed" value="true" />
+      <created>1720346571699</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1720346571700</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Issue resolved">
+      <option name="closed" value="true" />
+      <created>1720346725231</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1720346725231</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -71,5 +87,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="File Search Task (issue : not recognizing PDF)" />
+    <MESSAGE value="Issue resolved" />
+    <option name="LAST_COMMIT_MESSAGE" value="Issue resolved" />
   </component>
 </project>

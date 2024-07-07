@@ -24,7 +24,7 @@ public class FileSearchTask implements Callable<PatternMatchResult> {
             Pattern bestMatch = null;
 
             for (Pattern pattern : patterns) {
-                if (fileContent.contains(pattern.getSignature())) {
+                if (containsPattern(fileContent, pattern.getSignature())) {
                     if (bestMatch == null || pattern.getId() > bestMatch.getId()) {
                         bestMatch = pattern;
                     }
@@ -38,11 +38,18 @@ public class FileSearchTask implements Callable<PatternMatchResult> {
         }
     }
 
-    private byte[] readHeader(File file) throws IOException {
+    private boolean containsPattern(String fileContent, String pattern)
+    {
+        return fileContent.indexOf(pattern) != -1;
+    }
+
+    private byte[] readHeader(File file) throws IOException
+    {
         try (FileInputStream fis = new FileInputStream(file)) {
             byte[] data = new byte[Math.min(HEADER_SIZE, (int) file.length())];
             fis.read(data);
             return data;
         }
     }
+
 }

@@ -53,6 +53,7 @@ public class FileTypeDetector {
         List<Pattern> patterns = new ArrayList<>();
         patterns.add(new Pattern(1, "%PDF-", "PDF document"));
         patterns.add(new Pattern(2, "pmview", "PCP pmview config"));
+        patterns.add(new Pattern(3, "D0CF11E0A1B11AE1", "Microsoft Word 97-2003 Document"));
         patterns.add(new Pattern(4, "PK", "Zip archive"));
         patterns.add(new Pattern(5, "vnd.oasis.opendocument.presentation", "OpenDocument presentation"));
         patterns.add(new Pattern(6, "W.o.r.d", "MS Office Word 2003"));
@@ -62,7 +63,8 @@ public class FileTypeDetector {
         patterns.add(new Pattern(7, "xl/_rels", "MS Office Excel 2007+"));
         patterns.add(new Pattern(8, "-----BEGIN CERTIFICATE-----", "PEM certificate"));
         patterns.add(new Pattern(9, "ftypjp2", "ISO Media JPEG 2000"));
-        patterns.add(new Pattern(9, "ftypiso2", "ISO Media MP4 Base Media v2"));
+        patterns.add(new Pattern(10, "ftypiso2", "ISO Media MP4 Base Media v2"));
+        patterns.add(new Pattern(11, "FFD8FF", "JPEG image"));
         return patterns;
     }
 }
