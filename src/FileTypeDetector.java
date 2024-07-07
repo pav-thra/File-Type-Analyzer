@@ -65,6 +65,10 @@ public class FileTypeDetector {
         patterns.add(new Pattern(9, "ftypjp2", "ISO Media JPEG 2000"));
         patterns.add(new Pattern(10, "ftypiso2", "ISO Media MP4 Base Media v2"));
         patterns.add(new Pattern(11, "FFD8FF", "JPEG image"));
+        patterns.add(new Pattern(12, "50 4B 03 04", "Zip archive (.pptx)")); // PPTX files are essentially zip archives
+        patterns.add(new Pattern(13, "FF D8 FF", "JPEG image")); // Corrected pattern for JPEG images
+        patterns.add(new Pattern(14, "FF D8 FF", "JPEG image")); // Repeated for JPG since it's the same as JPEG
+        patterns.add(new Pattern(15, "D0 CF 11 E0 A1 B1 1A E1", "Microsoft Word 97-2003 Document")); // Pattern for .doc files
         return patterns;
     }
 }

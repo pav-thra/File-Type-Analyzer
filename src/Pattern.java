@@ -13,11 +13,12 @@ public class Pattern {
         return id;
     }
 
-    public String getSignature() {
-        return signature;
+    public byte[] getSignature() {
+        return signature.getBytes();
     }
 
     public String getDescription() {
         return description;
     }
 }
+

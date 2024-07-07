@@ -1,9 +1,9 @@
 public class RabinKarp {
     private final int prime = 101; // A prime number used for hashing
 
-    public boolean search(String text, String pattern) {
-        int m = pattern.length();
-        int n = text.length();
+    public boolean search(byte[] text, byte[] pattern) {
+        int m = pattern.length;
+        int n = text.length;
         long patternHash = createHash(pattern, m);
         long textHash = createHash(text, m);
 
@@ -18,27 +18,27 @@ public class RabinKarp {
         return false;
     }
 
-    private long createHash(String str, int end) {
+    private long createHash(byte[] str, int end) {
         long hash = 0;
         for (int i = 0; i < end; i++) {
-            hash += str.charAt(i) * Math.pow(prime, i);
+            hash += str[i] * Math.pow(prime, i);
         }
         return hash;
     }
 
-    private long recalculateHash(String str, int oldIndex, int newIndex, long oldHash, int patternLen) {
-        long newHash = oldHash - str.charAt(oldIndex);
+    private long recalculateHash(byte[] str, int oldIndex, int newIndex, long oldHash, int patternLen) {
+        long newHash = oldHash - str[oldIndex];
         newHash /= prime;
-        newHash += str.charAt(newIndex) * Math.pow(prime, patternLen - 1);
+        newHash += str[newIndex] * Math.pow(prime, patternLen - 1);
         return newHash;
     }
 
-    private boolean checkEqual(String str1, int start1, int end1, String str2, int start2, int end2) {
+    private boolean checkEqual(byte[] str1, int start1, int end1, byte[] str2, int start2, int end2) {
         if (end1 - start1 != end2 - start2) {
             return false;
         }
         while (start1 <= end1 && start2 <= end2) {
-            if (str1.charAt(start1) != str2.charAt(start2)) {
+            if (str1[start1] != str2[start2]) {
                 return false;
             }
             start1++;
